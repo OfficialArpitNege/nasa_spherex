@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --g: rgba(10, 18, 35, 0.55);
+  --b: rgba(140, 180, 255, 0.16);
+  --c: #67e8f9;
+  --o: #ff7a3d;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background-color: #02040a;
+  color: #dbe7ff;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.glass {
+  background: var(--g);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--b);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* Custom range styling */
+input[type="range"] {
+  accent-color: #22d3ee;
+}

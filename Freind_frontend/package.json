@@ -1,0 +1,10 @@
+{
+  "name": "spherex-frontend-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix nasa/frontend run dev --",
+    "build": "npm --prefix nasa/frontend run build",
+    "preview": "npm --prefix nasa/frontend run preview"
+  }
+}

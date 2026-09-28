@@ -88,8 +88,13 @@ def inspect_fits_cutout(
             wcs_obj = wcs_candidate
             ctype1 = header.get("CTYPE1", "Unknown")
             ctype2 = header.get("CTYPE2", "Unknown")
-            cdelt1 = abs(float(header.get("CDELT1", header.get("CD1_1", 0.0)))) * 3600.0
-            wcs_summary = f"{ctype1}/{ctype2} (~{cdelt1:.2f} arcsec/pix)"
+            try:
+                import astropy.wcs.utils as wutils
+                scales = wutils.proj_plane_pixel_scales(wcs_candidate)
+                pix_scale_arcsec = float(np.mean(scales)) * 3600.0
+            except Exception:
+                pix_scale_arcsec = abs(float(header.get("CDELT1", header.get("CD1_1", 0.0)))) * 3600.0
+            wcs_summary = f"{ctype1}/{ctype2} (~{pix_scale_arcsec:.2f} arcsec/pix)"
 
             # Compute pixel coordinates of target RA/DEC
             px, py = wcs_obj.world_to_pixel_values(center_ra, center_dec)

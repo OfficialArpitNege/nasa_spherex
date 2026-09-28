@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 from typing import Optional
 from fastapi import APIRouter, HTTPException, status
+from fastapi.responses import FileResponse
 
 from app.config import settings
 from app.models.cutout import CutoutRequestModel, CutoutResponseModel
@@ -166,3 +167,22 @@ def create_cutout(request: CutoutRequestModel):
         cutout_size_deg=request.cutout_size_deg,
         cached=cached
     )
+
+
+@router.get(
+    "/preview/{filename}",
+    summary="Serve generated FITS preview or visualization image",
+    description="Returns generated preview PNGs or motion plots safely."
+)
+def get_preview_image(filename: str):
+    cache_dir = Path(settings.CACHE_DIR)
+    # Check in previews/ and motion/ subdirectories, or cache_dir directly
+    candidates = [
+        cache_dir / "previews" / filename,
+        cache_dir / "motion" / filename,
+        cache_dir / filename,
+    ]
+    for p in candidates:
+        if p.exists() and p.is_file():
+            return FileResponse(p, media_type="image/png")
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Preview image '{filename}' not found.")
